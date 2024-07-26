@@ -7,7 +7,7 @@ import 'package:vazifa27/logic/bloc/puzzle_state.dart';
 class PuzzleScreen extends StatelessWidget {
   const PuzzleScreen({super.key});
 
-  void _showWinDialog(BuildContext context, int timeElapsed) {
+  void _showWinDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -63,7 +63,7 @@ class PuzzleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 114, 78, 176),
         centerTitle: true,
         title: const Text(
           'Puzzle Game',
@@ -77,7 +77,7 @@ class PuzzleScreen extends StatelessWidget {
       body: BlocConsumer<PuzzleBloc, PuzzleState>(
         listener: (context, state) {
           if (state.isCompleted) {
-            _showWinDialog(context, state.timeElapsed);
+            _showWinDialog(context);
           }
         },
         builder: (context, state) {

@@ -1,12 +1,10 @@
 class PuzzleState {
   final List<int> tiles;
   final bool isCompleted;
-  final int timeElapsed;
 
   const PuzzleState({
     required this.tiles,
     this.isCompleted = false,
-    this.timeElapsed = 0,
   });
 
   factory PuzzleState.initial() {
