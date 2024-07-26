@@ -18,12 +18,11 @@ class PuzzleState {
   PuzzleState copyWith({
     List<int>? tiles,
     bool? isCompleted,
-    int? timeElapsed,
   }) {
     return PuzzleState(
       tiles: tiles ?? this.tiles,
       isCompleted: isCompleted ?? this.isCompleted,
-      timeElapsed: timeElapsed ?? this.timeElapsed,
+     
     );
   }
 }

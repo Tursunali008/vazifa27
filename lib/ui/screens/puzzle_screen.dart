@@ -4,8 +4,8 @@ import 'package:vazifa27/logic/bloc/puzzle_bloc.dart';
 import 'package:vazifa27/logic/bloc/puzzle_event.dart';
 import 'package:vazifa27/logic/bloc/puzzle_state.dart';
 
-class PuzzlePage extends StatelessWidget {
-  const PuzzlePage({super.key});
+class PuzzleScreen extends StatelessWidget {
+  const PuzzleScreen({super.key});
 
   void _showWinDialog(BuildContext context, int timeElapsed) {
     showDialog(
@@ -13,7 +13,6 @@ class PuzzlePage extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Congratulations!'),
-          content: Text('You completed the puzzle in $timeElapsed seconds!'),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),
@@ -27,7 +26,7 @@ class PuzzlePage extends StatelessWidget {
     );
   }
 
-  buildTile(BuildContext context, int tile) {
+  Widget buildTile(BuildContext context, int tile) {
     return GestureDetector(
       onTap: tile == 0
           ? null
@@ -36,16 +35,21 @@ class PuzzlePage extends StatelessWidget {
             },
       child: Container(
         decoration: BoxDecoration(
-          color: tile == 0
-              ? Colors.grey[300]
-              : const Color.fromARGB(255, 33, 61, 243),
-          borderRadius: BorderRadius.circular(18),
+          color: tile == 0 ? Colors.grey[300] : Colors.blueAccent,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              offset: const Offset(2, 2),
+              blurRadius: 4,
+            ),
+          ],
         ),
         child: Center(
           child: Text(
             tile == 0 ? '' : '$tile',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
               color: tile == 0 ? Colors.transparent : Colors.white,
             ),
@@ -58,14 +62,15 @@ class PuzzlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(182, 22, 23, 26),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(39, 22, 23, 26),
+        backgroundColor: Colors.blue,
         centerTitle: true,
         title: const Text(
-          '15 Puzzle',
+          'Puzzle Game',
           style: TextStyle(
             color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -76,52 +81,60 @@ class PuzzlePage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return Padding(
-            padding: EdgeInsets.all(15),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FilledButton(
-                        onPressed: () {
-                          context.read<PuzzleBloc>().add(PuzzleShuffled());
-                        },
-                        child: const Text(
-                          'Restart',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'Time: ${state.timeElapsed}s',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                    ),
-                    itemCount: 16,
-                    itemBuilder: (context, index) {
-                      return buildTile(context, state.tiles[index]);
-                    },
-                  ),
-                ],
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: Image.network(
+                  'https://bogatyr.club/uploads/posts/2023-03/1678896872_bogatyr-club-p-fon-geim-foni-krasivo-20.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(
+                      height: 70,
+                    ),
+                    Expanded(
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                        ),
+                        itemCount: 16,
+                        itemBuilder: (context, index) {
+                          return buildTile(context, state.tiles[index]);
+                        },
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<PuzzleBloc>().add(PuzzleShuffled());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Restart',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
